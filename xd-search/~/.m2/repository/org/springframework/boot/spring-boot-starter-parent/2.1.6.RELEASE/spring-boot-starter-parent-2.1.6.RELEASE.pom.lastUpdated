@@ -1,0 +1,6 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Fri Jul 12 20:01:34 CST 2019
+@default-local-nexus-http\://localhost\:8082/nexus/content/groups/public/.lastUpdated=1562932894729
+http\://localhost\:8082/nexus/content/groups/public/.error=Could not transfer artifact org.springframework.boot\:spring-boot-starter-parent\:pom\:2.1.6.RELEASE from/to nexusMirror (http\://localhost\:8082/nexus/content/groups/public/)\: Connect to localhost\:8082 [localhost/127.0.0.1, localhost/0\:0\:0\:0\:0\:0\:0\:1] failed\: Connection refused (Connection refused)
+@default-nexusMirror-http\://localhost\:8082/nexus/content/groups/public/.lastUpdated=1562932894749
+@default-local-nexus-snapshot-http\://localhost\:8082/nexus/content/groups/public/.lastUpdated=1562932894741

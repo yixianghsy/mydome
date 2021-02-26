@@ -1,0 +1,185 @@
+#user  nobody;
+worker_processes  1;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    upstream manager.mall.com {
+    server 127.0.0.1:8081;
+    }
+    upstream portal.mall.com {
+    server 127.0.0.1:8082;
+    }
+    upstream search.mall.com {
+    server 127.0.0.1:8083;
+    }
+    upstream item.mall.com {
+    server 127.0.0.1:8084;
+    }
+    upstream sso.mall.com {
+    server 127.0.0.1:8085;
+    }
+    upstream cart.mall.com {
+    server 127.0.0.1:8086;
+    }
+    upstream order.mall.com {
+    server 127.0.0.1:8087;
+    }
+    
+   server {
+        listen       80;
+        server_name  manager.mall.com;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            proxy_pass   http://manager.mall.com;
+            index  index.html index.htm;
+        }
+    }
+    server {
+        listen       80;
+        server_name  portal.mall.com;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            proxy_pass  http://portal.mall.com;
+            index  index.html index.htm;
+        }
+    }
+    server {
+        listen       80;
+        server_name  search.mall.com;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            proxy_pass   http://search.mall.com;
+            index  index.html index.htm;
+        }
+    }
+    server {
+        listen       80;
+        server_name  item.mall.com;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            proxy_pass   http://item.mall.com;
+            index  index.html index.htm;
+        }
+    }
+    server {
+        listen       80;
+        server_name  sso.mall.com;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            proxy_pass   http://sso.mall.com;
+            index  index.html index.htm;
+        }
+    }
+    server {
+        listen       80;
+        server_name  cart.mall.com;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            proxy_pass   http://cart.mall.com;
+            index  index.html index.htm;
+        }
+    }
+    server {
+        listen       80;
+        server_name  order.mall.com;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            proxy_pass   http://order.mall.com;
+            index  index.html index.htm;
+        }
+    }
+    server {
+    listen 80;
+autoindex on;
+## server_name需要修改为你的服务地址
+server_name dubbo-swagger.cn;
+#access_log /usr/local/nginx/logs/access.log combined;
+index index.html index.htm index.jsp index.php;
+if ( $query_string ~* ".*[\;'\<\>].*" ){
+        return 404;
+        }
+
+location / {
+        proxy_pass http://127.0.0.1:8902/oauth/token;
+  if ($request_method = 'OPTIONS') {
+          add_header 'Access-Control-Allow-Origin' '*';
+          add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+          add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization';
+          add_header 'Access-Control-Max-Age' 1728000;
+          add_header 'Content-Type' 'text/plain; charset=utf-8';
+          add_header 'Content-Length' 0;
+          return 204;
+        }
+        if ($request_method = 'POST') {
+          add_header 'Access-Control-Allow-Origin' '*';
+          add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+          add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization';
+          add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
+        }
+        if ($request_method = 'GET') {
+          add_header 'Access-Control-Allow-Origin' '*';
+          add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+          add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization';
+          add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
+        }
+      }
+
+}
+
+}

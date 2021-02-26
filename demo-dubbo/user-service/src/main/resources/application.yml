@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: dubbo-auto-configuration-provider-demo
+
+#dubbo:
+#  scan:
+#    base-packages: com.xdclass.user.service.impl
+#  protocol:
+#    name: dubbo
+#    port: 12345
+#  registry:
+#    address: N/
+dubbo:
+  application:
+    name: user-service
+  protocol:
+    name: dubbo
+    port: 20880
+  registry:
+    address: zookeeper://192.168.10.101:2181
+    protocol: zookeeper
+  scan:
+    base-packages: com.xdclass.user.service.impl
+server:
+  port: 8020
