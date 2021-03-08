@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,9 +35,26 @@ public class SpringSecurityConfig   extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
                 .loginPage("/login/page")
+                // 登录表单提交处理url, 默认是/login
+                .loginProcessingUrl("/login/form")
+                //默认的是 username
+                .usernameParameter("name")
+                // 默认的是 password
+                .passwordParameter("pwd")
                 .and()
-                .authorizeRequests()//请求认证
+                //请求认证
+                .authorizeRequests()
+                .antMatchers("/login/page").permitAll()
                 .anyRequest().authenticated();// 所有进入应用的HTTP请求都要进行认证
+    }
+
+    /**
+     * 释放静态资源
+     * @param web
+     */
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/dist/**", "/modules/**", "/plugins/**");
     }
 
     /**
