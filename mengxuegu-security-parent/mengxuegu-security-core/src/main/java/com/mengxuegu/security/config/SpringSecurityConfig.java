@@ -33,6 +33,7 @@ public class SpringSecurityConfig   extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
+                .loginPage("/login/page")
                 .and()
                 .authorizeRequests()//请求认证
                 .anyRequest().authenticated();// 所有进入应用的HTTP请求都要进行认证
