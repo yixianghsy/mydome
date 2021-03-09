@@ -6,6 +6,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 
 /**
  * 加载认证信息配置类
+ * @Auther: 梦学谷 www.mengxuegu.com
  */
 @Configuration
 public class ReloadMessageConfig {
