@@ -14,13 +14,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
 import javax.sql.DataSource;
 
@@ -71,8 +76,27 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Autowired
     private MobileAuthenticationConfig mobileAuthenticationConfig;
+
     @Autowired
     DataSource dataSource;
+
+    /**
+     * 注入session失败策略
+     */
+    @Autowired
+    private InvalidSessionStrategy invalidSessionStrategy;
+
+    /**
+     * 当同个用户session数量超过指定值之后 ,会调用这个实现类
+     */
+    @Autowired
+    private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
+
+    /**
+     * 注入 customLogoutHandler
+     */
+    @Autowired
+    private LogoutHandler customLogoutHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -153,9 +177,45 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 //保存登录信息
                 .tokenRepository(jdbcTokenRepository())
                  //记住我有效时长
-                .tokenValiditySeconds(60*60*24*7)
+                .tokenValiditySeconds(securityProperties.getAuthentication().getTokenValiditySeconds())
+                .and()
+                    /**
+                     * session管理
+                     * 当session失效后的处理类
+                     * 每个用户在系统中最多可以有多少个session
+                     * 当用户达到最大session数后，则调用此处的实现
+                     *  当一个用户达到最大session数,则不允许后面再登录
+                     */
+                 .sessionManagement()
+                 .invalidSessionStrategy(invalidSessionStrategy)
+                 .maximumSessions(1)
+                 .expiredSessionStrategy(sessionInformationExpiredStrategy)
+                 .maxSessionsPreventsLogin(true)
+                 .sessionRegistry(sessionRegistry())
+                 .and().and()
+                    .logout()
+                    /**
+                     *  退出清除缓存
+                     *  退出请求路径
+                     *  退出成功后跳转地址
+                     *  退出后删除什么cookie值
+                     */
+                    .addLogoutHandler(customLogoutHandler)
+                    .logoutUrl("/user/logout")
+                    .logoutSuccessUrl("/mobile/page")
+                    .deleteCookies("JSESSIONID")
                 ; // 注意不要少了分号
         http.apply(mobileAuthenticationConfig);
+        http.csrf().disable(); // 关闭跨站请求伪造
+    }
+
+    /**
+     * 为了解决退出重新登录问题
+     * @return
+     */
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return  new SessionRegistryImpl();
     }
 
     /**

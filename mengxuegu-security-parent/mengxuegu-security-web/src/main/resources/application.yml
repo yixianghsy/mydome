@@ -1,7 +1,17 @@
 server:
   port: 8080
+  servlet:
+    session:
+      timeout: 1m # session会话超时时间,默认情况 下是30分钟(m),不能小于1分钟
+      cookie:
+        name: JSESSIONID #统一指定浏览器中 Cookie 保存的SessionID名称
 
 spring:
+  session:
+    store-type: redis
+  redis:
+    host: 192.168.10.101
+    port: 6379
   thymeleaf:
     cache: false #关闭thymeleaf缓存
   # 数据源配置
