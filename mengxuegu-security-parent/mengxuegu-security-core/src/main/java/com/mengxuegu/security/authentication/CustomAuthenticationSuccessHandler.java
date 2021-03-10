@@ -19,19 +19,21 @@ import java.io.IOException;
 /**
  * 认证成功处理器
  * 1. 决定 响应json还是跳转页面，或者认证成功后进行其他处理
+ * @Auther: 梦学谷 www.mengxuegu.com
  */
 @Component("customAuthenticationSuccessHandler")
-public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 //public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     SecurityProperties securityProperties;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
-                                        HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        
         if(LoginResponseType.JSON.equals(
-                securityProperties.getAuthentication().getLoginType())) {
+                    securityProperties.getAuthentication().getLoginType())) {
             // 认证成功后，响应JSON字符串
             MengxueguResult result = MengxueguResult.ok("认证成功");
             response.setContentType("application/json;charset=UTF-8");
@@ -41,5 +43,6 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
             logger.info("authentication: " + JSON.toJSONString(authentication));
             super.onAuthenticationSuccess(request, response, authentication);
         }
+
     }
 }

@@ -1,7 +1,7 @@
 package com.mengxuegu.security.authentication.mobile;
 
 import com.mengxuegu.security.authentication.CustomAuthenticationFailureHandler;
-import com.mengxuegu.security.authentication.code.ValidateCodeException;
+import com.mengxuegu.security.authentication.exception.ValidateCodeException;
 import com.mengxuegu.security.controller.MobileLoginController;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
