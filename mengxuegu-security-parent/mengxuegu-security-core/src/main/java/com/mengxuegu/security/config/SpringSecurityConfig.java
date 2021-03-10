@@ -18,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+
+import javax.sql.DataSource;
 
 
 /**
@@ -43,9 +46,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationFailureHandler customAuthenticationFailureHandler;
 
-    // 验证码校验过滤器
+    /**
+     * 验证码校验过滤器
+      */
     @Autowired
     ImageCodeValidateFilter imageCodeValidateFilter;
+
+
+    @Autowired
+    DataSource dataSource;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -53,6 +62,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * 记住我功能
+     * @return
+     */
+    @Bean
+    public JdbcTokenRepositoryImpl jdbcTokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        // 是否启动项目时自动创建表，true自动创建
+        jdbcTokenRepository.setCreateTableOnStartup(false);
+        return jdbcTokenRepository;
+    }
     /**
      * 认证管理器：
      * 1. 认证信息（用户名，密码）
@@ -103,6 +124,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 //所有访问该应用的http请求都要通过身份认证才可以访问
                 .anyRequest().authenticated()
+                .and()
+                //记住我功能
+                .rememberMe()
+                //保存登录信息
+                .tokenRepository(jdbcTokenRepository())
+                 //记住我有效时长
+                .tokenValiditySeconds(60*60*24*7)
                 ; // 注意不要少了分号
     }
 

@@ -30,11 +30,10 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 1.如果是pos 方式的登录请求，则校验输入的验证码
-        if (securityProperties.getAuthentication().getLoginProcessingUrl().equals(request
-                .getRequestURI())&&
-                request.getMethod()
-                .equalsIgnoreCase("post")){
+        // 1. 如果是post方式 的登录请求，则校验输入的验证码是否正确
+        if(securityProperties.getAuthentication().getLoginProcessingUrl()
+                .equals(request.getRequestURI())
+                && request.getMethod().equalsIgnoreCase("post")) {
             try {
                 // 校验验证码合法性
                 validate(request);
@@ -45,19 +44,21 @@ public class ImageCodeValidateFilter extends OncePerRequestFilter {
                 return;
             }
         }
-        filterChain.doFilter(request,response);
 
+        // 放行请求
+        filterChain.doFilter(request, response);
     }
-    private  void validate(HttpServletRequest request) {
+    private void validate(HttpServletRequest request) {
         // 先获取seesion中的验证码
         String sessionCode =
                 (String)request.getSession().getAttribute(CustomLoginController.SESSION_KEY);
         // 获取用户输入的验证码
         String inpuCode = request.getParameter("code");
         // 判断是否正确
-        if (StringUtils.isBlank(inpuCode)){
-            throw  new ValidateCodeException("验证码不能为空");
+        if(StringUtils.isBlank(inpuCode)) {
+            throw new ValidateCodeException("验证码不能为空");
         }
+
         if(!inpuCode.equalsIgnoreCase(sessionCode)) {
             throw new ValidateCodeException("验证码输入错误");
         }
