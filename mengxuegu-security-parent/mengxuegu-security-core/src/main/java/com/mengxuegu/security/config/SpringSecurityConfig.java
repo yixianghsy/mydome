@@ -1,6 +1,8 @@
 package com.mengxuegu.security.config;
 
 import com.mengxuegu.security.authentication.code.ImageCodeValidateFilter;
+import com.mengxuegu.security.authentication.mobile.MobileAuthenticationConfig;
+import com.mengxuegu.security.authentication.mobile.MobileValidateFilter;
 import com.mengxuegu.security.properties.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +36,22 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     * 配置文件参数
+     */
     @Autowired
     private SecurityProperties securityProperties;
 
     @Autowired
     private UserDetailsService customUserDetailsService;
-
+    /**
+     *成功处理器
+     */
     @Autowired
     private AuthenticationSuccessHandler customAuthenticationSuccessHandler;
-
+    /**
+     * 失败处理器
+     */
     @Autowired
     private AuthenticationFailureHandler customAuthenticationFailureHandler;
 
@@ -52,7 +61,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     ImageCodeValidateFilter imageCodeValidateFilter;
 
-
+    /**
+     *  校验手机验证码
+      */
+    @Autowired
+    private MobileValidateFilter mobileValidateFilter;
+    /**
+     * 校验手机号是否存在,就是手机号认证
+     */
+    @Autowired
+    private MobileAuthenticationConfig mobileAuthenticationConfig;
     @Autowired
     DataSource dataSource;
 
@@ -101,7 +119,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.httpBasic() // 采用 httpBasic认证方式
-        http.addFilterBefore(imageCodeValidateFilter, UsernamePasswordAuthenticationFilter.class)
+        //校验手机验证码过滤器
+            http.addFilterBefore(mobileValidateFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(imageCodeValidateFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin() // 表单登录方式
                 .loginPage(securityProperties.getAuthentication().getLoginPage())
                 // 登录表单提交处理url, 默认是/login
@@ -118,10 +138,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .authorizeRequests() // 认证请求
-                // 放行/login/page不需要认证可访问
+                // 放行/login/page不需要认证可访问,以下链接可直接访问
                 .antMatchers(securityProperties.getAuthentication().getLoginPage(),
-                        "/code/image")
-                .permitAll()
+//                    "/code/image","/mobile/page", "/code/mobile"
+                        securityProperties.getAuthentication().getImageCodeUrl(),
+                        securityProperties.getAuthentication().getMobilePage(),
+                        securityProperties.getAuthentication().getMobileCodeUrl()
+                ).permitAll()
                 //所有访问该应用的http请求都要通过身份认证才可以访问
                 .anyRequest().authenticated()
                 .and()
@@ -132,6 +155,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                  //记住我有效时长
                 .tokenValiditySeconds(60*60*24*7)
                 ; // 注意不要少了分号
+        http.apply(mobileAuthenticationConfig);
     }
 
     /**

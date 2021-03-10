@@ -1,5 +1,8 @@
 package com.mengxuegu.security.properties;
 
+import lombok.Data;
+
+@Data
 public class AuthenticationProperties {
 
     private String loginPage = "/login/page";
@@ -12,52 +15,20 @@ public class AuthenticationProperties {
      * 认证响应的类型： JSON 、 REDIRECT 重定向
      */
     private LoginResponseType loginType = LoginResponseType.REDIRECT;
-
-    public LoginResponseType getLoginType() {
-        return loginType;
-    }
-
-    public void setLoginType(LoginResponseType loginType) {
-        this.loginType = loginType;
-    }
-
-    public String getLoginPage() {
-        return loginPage;
-    }
-
-    public void setLoginPage(String loginPage) {
-        this.loginPage = loginPage;
-    }
-
-    public String getLoginProcessingUrl() {
-        return loginProcessingUrl;
-    }
-
-    public void setLoginProcessingUrl(String loginProcessingUrl) {
-        this.loginProcessingUrl = loginProcessingUrl;
-    }
-
-    public String getUsernameParameter() {
-        return usernameParameter;
-    }
-
-    public void setUsernameParameter(String usernameParameter) {
-        this.usernameParameter = usernameParameter;
-    }
-
-    public String getPasswordParameter() {
-        return passwordParameter;
-    }
-
-    public void setPasswordParameter(String passwordParameter) {
-        this.passwordParameter = passwordParameter;
-    }
-
-    public String[] getStaticPaths() {
-        return staticPaths;
-    }
-
-    public void setStaticPaths(String[] staticPaths) {
-        this.staticPaths = staticPaths;
-    }
+    /**
+     *  获取图形验证码地址
+     */
+    private String imageCodeUrl = "/code/image";
+    /**
+     * # 发送手机验证码地址
+     */
+    private String mobileCodeUrl = "/code/mobile";
+    /**
+     * # 前往手机登录页面
+     */
+    private String mobilePage = "/mobile/page";
+    /**
+     * # 记住我功能有效时长
+     */
+    private Integer tokenValiditySeconds = 60*60*24*7;
 }
