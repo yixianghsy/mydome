@@ -31,12 +31,12 @@
         </dependency>
 
 
-        <!--图片验证码
+        <!--图片验证码-->
         <dependency>
             <groupId>com.github.penggle</groupId>
             <artifactId>kaptcha</artifactId>
         </dependency>
-		-->
+
         <!--数据库依赖
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,5 +1,6 @@
 package com.mengxuegu.security.config;
 
+import com.mengxuegu.security.authentication.code.ImageCodeValidateFilter;
 import com.mengxuegu.security.properties.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 /**
@@ -40,6 +42,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthenticationFailureHandler customAuthenticationFailureHandler;
+
+    // 验证码校验过滤器
+    @Autowired
+    ImageCodeValidateFilter imageCodeValidateFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -74,7 +80,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.httpBasic() // 采用 httpBasic认证方式
-        http.formLogin() // 表单登录方式
+        http.addFilterBefore(imageCodeValidateFilter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin() // 表单登录方式
                 .loginPage(securityProperties.getAuthentication().getLoginPage())
                 // 登录表单提交处理url, 默认是/login
                 .loginProcessingUrl(securityProperties.getAuthentication().getLoginProcessingUrl())
@@ -91,7 +98,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests() // 认证请求
                 // 放行/login/page不需要认证可访问
-                .antMatchers(securityProperties.getAuthentication().getLoginPage()).permitAll()
+                .antMatchers(securityProperties.getAuthentication().getLoginPage(),
+                        "/code/image")
+                .permitAll()
                 //所有访问该应用的http请求都要通过身份认证才可以访问
                 .anyRequest().authenticated()
                 ; // 注意不要少了分号

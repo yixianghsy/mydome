@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 @Component // 不要少了
 @ConfigurationProperties( prefix = "mengxuegu.security")
 public class SecurityProperties {
-    // 会将 mengxuegu.security.authentication 下面的值绑定到AuthenticationProperties对象上
+    /**
+     * 会将 mengxuegu.security.authentication 下面的值绑定到AuthenticationProperties对象上
+      */
     private AuthenticationProperties authentication;
 
     public AuthenticationProperties getAuthentication() {
