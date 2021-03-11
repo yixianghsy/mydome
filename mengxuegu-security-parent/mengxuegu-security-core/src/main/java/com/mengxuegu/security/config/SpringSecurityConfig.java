@@ -3,6 +3,7 @@ package com.mengxuegu.security.config;
 import com.mengxuegu.security.authentication.code.ImageCodeValidateFilter;
 import com.mengxuegu.security.authentication.mobile.MobileAuthenticationConfig;
 import com.mengxuegu.security.authentication.mobile.MobileValidateFilter;
+import com.mengxuegu.security.authorize.AuthorizeConfigurerManager;
 import com.mengxuegu.security.properties.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,6 +39,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableWebSecurity // 开启springsecurity过滤链 filter
+@EnableGlobalMethodSecurity(prePostEnabled= true) //开启注解方法级权限控制
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     Logger logger = LoggerFactory.getLogger(getClass());
@@ -93,10 +96,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
 
     /**
-     * 注入 customLogoutHandler
+     * 注入 customLogoutHandler退出清除缓存
      */
     @Autowired
     private LogoutHandler customLogoutHandler;
+
+    /**
+     * 管理了所有关于权限的配置
+     */
+    @Autowired
+    private AuthorizeConfigurerManager authorizeConfigurerManager;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -159,7 +168,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 //认证失败处理器
                 .failureHandler(customAuthenticationFailureHandler)
 
-                .and()
+/*                .and()
 
                 .authorizeRequests() // 认证请求
                 // 放行/login/page不需要认证可访问,以下链接可直接访问
@@ -169,8 +178,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         securityProperties.getAuthentication().getMobilePage(),
                         securityProperties.getAuthentication().getMobileCodeUrl()
                 ).permitAll()
+                    //
+//                    // 有 sys:user 权限的可以访问任意请求方式的/role
+                    .antMatchers("/user").hasAuthority("sys:user")
+//                    // 有 sys:role 权限的可以访问 get方式的/role
+                    .antMatchers(HttpMethod.GET,"/role").hasAuthority("sys:role")
+                    //角色会加上前缀 ROLE_,即真实是 ROLE_ADMIN
+                    .antMatchers(HttpMethod.GET, "/permission").access("hasAuthority('sys:permission') or hasAnyRole('ADMIN')")
                 //所有访问该应用的http请求都要通过身份认证才可以访问
-                .anyRequest().authenticated()
+                .anyRequest().authenticated()*/
+
                 .and()
                 //记住我功能
                 .rememberMe()
@@ -205,7 +222,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/mobile/page")
                     .deleteCookies("JSESSIONID")
                 ; // 注意不要少了分号
+        //将手机认证添加到过滤器链上
         http.apply(mobileAuthenticationConfig);
+        // 权限相关配置管理者, 将所有授权配置管理起来了
+        authorizeConfigurerManager.configure(http.authorizeRequests());
+
         http.csrf().disable(); // 关闭跨站请求伪造
     }
 
