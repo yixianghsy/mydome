@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
+/**
+ * @Auther: 梦学谷 www.mengxuegu.com
+ */
 @Configuration
 public class DruidConfig {
 
@@ -16,4 +19,6 @@ public class DruidConfig {
     public DataSource dataSource() {
         return new DruidDataSource();
     }
+
+
 }

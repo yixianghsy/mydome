@@ -8,15 +8,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class SysPermissionServiceImpl  extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
+public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
+    
+    
     @Override
     public List<SysPermission> findByUserId(Long userId) {
-        if (userId == null){
+        if(userId == null) {
             return null;
         }
         List<SysPermission> permissionList = baseMapper.selectPermissionByUserId(userId);
         //用户无任何权限时,list会有一个 `null` 空的SysPermission 对象,把那个null移除
-        permissionList.remove(null);
+//        permissionList.remove(null);
         return permissionList;
     }
+    
 }

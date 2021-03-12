@@ -14,27 +14,29 @@ import org.springframework.stereotype.Service;
  * 第2个泛型 T 指定实体类
  */
 @Service
-public class SysUserServiceImpl    extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+
     @Override
     public SysUser findByUsername(String username) {
-        if (StringUtils.isEmpty(username)){
+        if(StringUtils.isEmpty(username)) {
             return null;
         }
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("username",username);
+        queryWrapper.eq("username", username);
         // baseMapper 对应的是就是 SysUserMapper
         return baseMapper.selectOne(queryWrapper);
     }
 
     @Override
     public SysUser findByMobile(String mobile) {
-        if (StringUtils.isEmpty(mobile)){
+        if(StringUtils.isEmpty(mobile)) {
             return null;
         }
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("mobile",mobile);
+        queryWrapper.eq("mobile", mobile);
+        // baseMapper 对应的是就是 SysUserMapper
         return baseMapper.selectOne(queryWrapper);
     }
+
+
 }
-
-
