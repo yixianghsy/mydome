@@ -1,7 +1,10 @@
 package com.mengxuegu.security.authentication.session;
 
 import com.mengxuegu.base.result.MengxueguResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.session.InvalidSessionStrategy;
 
 import javax.servlet.http.Cookie;
@@ -15,8 +18,19 @@ import java.io.IOException;
  */
 
 public class CustomInvalidSessionStrategy implements InvalidSessionStrategy {
+    Logger logger = LoggerFactory.getLogger(getClass());
+
+    private SessionRegistry sessionRegistry;
+
+    public CustomInvalidSessionStrategy(SessionRegistry sessionRegistry) {
+        this.sessionRegistry = sessionRegistry;
+    }
+
     @Override
     public void onInvalidSessionDetected(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        logger.info("getSession().getId(): " + request.getSession().getId());
+        logger.info("getRequestedSessionId(): " + request.getRequestedSessionId());
+        sessionRegistry.removeSessionInformation(request.getRequestedSessionId());
 
         // 要将浏览器中的cookie的jsessionid删除
         cancelCookie(request, response);

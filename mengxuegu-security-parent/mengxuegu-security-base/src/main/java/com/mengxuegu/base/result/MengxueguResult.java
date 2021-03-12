@@ -13,7 +13,6 @@ public class MengxueguResult {
     private Integer code;
 
     // 响应消息
-    // 响应消息
     private String message;
 
     // 响应中的数据

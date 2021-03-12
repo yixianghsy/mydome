@@ -1,8 +1,8 @@
 package com.mengxuegu.security.authentication;
 
 import com.mengxuegu.base.result.MengxueguResult;
-import com.mengxuegu.security.properties.LoginResponseType;
-import com.mengxuegu.security.properties.SecurityProperties;
+import com.mengxuegu.security.properites.LoginResponseType;
+import com.mengxuegu.security.properites.SecurityProperties;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,12 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
             // 获取上一次请求路径
             String referer = request.getHeader("Referer");
             logger.info("referer:" + referer);
-            String lastUrl = StringUtils.substringBefore(referer,"?");
+
+            // 如果下面有值,则认为是多端登录,直接返回一个登录地址
+            Object toAuthentication = request.getAttribute("toAuthentication");
+            String lastUrl = toAuthentication != null ? securityProperties.getAuthentication().getLoginPage()
+                    : StringUtils.substringBefore(referer,"?");
+
             logger.info("上一次请求的路径 ：" + lastUrl);
             super.setDefaultFailureUrl(lastUrl+"?error");
             super.onAuthenticationFailure(request, response, exception);

@@ -3,7 +3,7 @@ package com.mengxuegu.security.authentication.code;
 import com.mengxuegu.security.authentication.CustomAuthenticationFailureHandler;
 import com.mengxuegu.security.authentication.exception.ValidateCodeException;
 import com.mengxuegu.security.controller.CustomLoginController;
-import com.mengxuegu.security.properties.SecurityProperties;
+import com.mengxuegu.security.properites.SecurityProperties;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;

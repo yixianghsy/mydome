@@ -2,8 +2,8 @@ package com.mengxuegu.security.authentication;
 
 import com.alibaba.fastjson.JSON;
 import com.mengxuegu.base.result.MengxueguResult;
-import com.mengxuegu.security.properties.LoginResponseType;
-import com.mengxuegu.security.properties.SecurityProperties;
+import com.mengxuegu.security.properites.LoginResponseType;
+import com.mengxuegu.security.properites.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

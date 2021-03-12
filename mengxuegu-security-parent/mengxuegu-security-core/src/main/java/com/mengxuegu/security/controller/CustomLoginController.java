@@ -43,6 +43,7 @@ public class CustomLoginController {
     public void imageCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //1、获取验证码字符串
         String code = defaultKaptcha.createText();
+        logger.info("生成的图形验证码是：" + code);
         //2.字符串放在session中
         request.getSession().setAttribute(SESSION_KEY,code);
         //3. 获取验证码图片

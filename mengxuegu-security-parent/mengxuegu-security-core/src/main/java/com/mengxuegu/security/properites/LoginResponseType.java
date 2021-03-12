@@ -1,4 +1,4 @@
-package com.mengxuegu.security.properties;
+package com.mengxuegu.security.properites;
 
 /**
  * 认证响应的类型

@@ -11,13 +11,17 @@
     <script th:src="@{/dist/js/adminlte.min.js}" src="../dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script th:src="@{/dist/js/demo.js}" src="../dist/js/demo.js"></script>
+
     <script type="text/javascript" th:inline="javascript">
         // 获取项目应用名, 在其他js中可以引用它, 不要少了 th:inline="javascript"
         /*<![CDATA[*/
         contextPath = /*[[@{/}]]*/ '';
         /*]]>*/
     </script>
+
 </th:block>
+
+
 <!-- inputmask 如 邮箱地址 -->
 <th:block th:fragment="inputmask-js">
     <script th:src="@{/plugins/moment/moment.min.js}" src="../../plugins/moment/moment.min.js"></script>

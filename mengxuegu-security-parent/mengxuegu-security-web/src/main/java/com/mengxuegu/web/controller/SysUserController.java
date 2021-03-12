@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * 用户管理
+ * @Auther: 梦学谷 www.mengxuegu.com
  */
 @Controller
 @RequestMapping("/user")
@@ -23,19 +24,15 @@ public class SysUserController {
 
     private static final String HTML_PREFIX = "system/user/";
 
-    /**
-     * 前往用户列表页面
-     * @return
-     */
+
     @PreAuthorize("hasAuthority('sys:user')")
-    @GetMapping(value = {"/", ""})
+    @GetMapping(value = {"/", ""}) // /user/  /user
     public String user() {
         return HTML_PREFIX + "user-list";
     }
 
     /**
      * 跳转到新增或者修改页面
-     * 有'sys:user:add' 或 'sys:user:edit'权限的可以访问
      * @return
      */
     // 有 'sys:user:add' 或 'sys:user:edit'权限 的用户可以访问
@@ -58,13 +55,6 @@ public class SysUserController {
         return MengxueguResult.ok();
     }
 
-    /**
-     * 批量删除
-     * // 测试:http://localhost/user/batch/-1,0,1,2 ,响应 {"code":200,"message":"OK","data":[1,2]}
-     * // filterTarget 过滤集合属性名, filterObject集合中的元素,只接收id>0的数据
-     * @param ids
-     * @return
-     */
     // 过滤请求参数：filterTarget 指定哪个参数，filterObject是集合中的每个元素，
     // 如果value表达式为true的数据则不会被过滤，否则 就过滤掉
     @PreFilter(filterTarget = "ids", value = "filterObject > 0")
@@ -82,5 +72,5 @@ public class SysUserController {
         List<String> userList = Lists.newArrayList("meng", "xue", "gu");
         return userList;
     }
-}
 
+}

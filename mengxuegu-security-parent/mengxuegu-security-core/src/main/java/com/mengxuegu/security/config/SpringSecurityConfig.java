@@ -4,7 +4,7 @@ import com.mengxuegu.security.authentication.code.ImageCodeValidateFilter;
 import com.mengxuegu.security.authentication.mobile.MobileAuthenticationConfig;
 import com.mengxuegu.security.authentication.mobile.MobileValidateFilter;
 import com.mengxuegu.security.authorize.AuthorizeConfigurerManager;
-import com.mengxuegu.security.properties.SecurityProperties;
+import com.mengxuegu.security.properites.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

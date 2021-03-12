@@ -8,5 +8,7 @@ import org.springframework.security.config.annotation.web.configurers.Expression
  * 加载 AuthorizeConfigurerManager 所有实现类到容器中
  */
 public interface AuthorizeConfigurerManager {
+
     void configure(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry config);
+
 }

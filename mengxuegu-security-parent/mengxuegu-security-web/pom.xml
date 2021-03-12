@@ -12,12 +12,12 @@
     <artifactId>mengxuegu-security-web</artifactId>
 
     <dependencies>
+
         <!--web启动器,对springmvc,serlvet等支持-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <!--注意要放到web启动器的下面-->
         <dependency>
             <groupId>com.mengxuegu</groupId>
@@ -30,12 +30,24 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-        <!--对Thymeleaf添加Spring Security标签支持 -->
-
-        <dependency>
+        <!--对Thymeleaf添加Spring Security标签支持-->
+         <dependency>
              <groupId>org.thymeleaf.extras</groupId>
              <artifactId>thymeleaf-extras-springsecurity5</artifactId>
-         </dependency>`
+         </dependency>
+
+        <!--mybatis-plus启动器
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+		-->
+        <!--druid连接池
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+        </dependency>
+		-->
 
         <!--bootstrap-table-->
         <dependency>
@@ -43,7 +55,6 @@
             <artifactId>bootstrap-table</artifactId>
             <version>1.14.1</version>
         </dependency>
-
         <!--jquery-treeGrid-->
         <dependency>
             <groupId>org.webjars.bower</groupId>
@@ -56,26 +67,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <!--layer-->
         <dependency>
             <groupId>org.webjars.bowergithub.sentsin</groupId>
             <artifactId>layer</artifactId>
             <version>3.1.1</version>
         </dependency>
-
-        <!--mybatis-plus启动器
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-        -->
-        <!--druid连接池
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-        </dependency>
-		-->
 
         <!-- application.yml 配置处理器-->
         <dependency>

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class CustomLogoutHandler implements LogoutHandler {
+
     @Autowired
     private SessionRegistry sessionRegistry;
 

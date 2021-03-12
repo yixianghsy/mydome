@@ -1,4 +1,4 @@
-package com.mengxuegu.security.properties;
+package com.mengxuegu.security.properites;
 
 import lombok.Data;
 
