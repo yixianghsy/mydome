@@ -28,10 +28,17 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     @Autowired
     SecurityProperties securityProperties;
 
+    @Autowired(required = false) // false不是一定要实现,有则注入,没有不注入
+    AuthenticationSuccessListener authenticationSuccessListener;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
         HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        
+        if (authenticationSuccessListener !=null){
+            // 当认证之后 ，调用此监听，进行后续处理，比如加载用户权限菜单
+            authenticationSuccessListener.successListener(request,response,authentication);
+        }
+
         if(LoginResponseType.JSON.equals(
                     securityProperties.getAuthentication().getLoginType())) {
             // 认证成功后，响应JSON字符串
