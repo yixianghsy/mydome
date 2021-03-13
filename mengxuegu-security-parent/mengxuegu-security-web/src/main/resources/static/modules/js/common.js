@@ -25,24 +25,16 @@ $(function() {
                     // 1. 加载数据到列表中 rows接收渲染数据 res.data.records , total接收总记录数来自动计算页码
                     $table.bootstrapTable("load", {rows: res.data.records, total: res.data.total});
 
-                    // 2. `操作`权限判断, 增删改只要有一个就显示, 自已在html上定义此方法实现
+                    // 2. `操作`权限判断, 删改只要有一个就显示, 自已在html上定义此方法实现
                     showOperation();
 
-                    // 3. 渲染为树状列表
-                    $table.treegrid({
-                        initialState: 'collapsed',  // collapsed折叠, expanded展开(默认)
-                        treeColumn: 1,
-                        onChange: function() {
-                            $table.bootstrapTable('resetWidth');
-                        }
-                    })
                 }
             })
         },
         // 封装分页查询参数, params是bootstrap-table自动传入的
         queryParams: function(params) {
             return {
-                size: params.limit, // 每页显示条数
+                size: params.limit, // 每页显示条数 3
                 current: params.offset / params.limit + 1 //当前页码; params.offset 每次查询数据初始的数字
             }
         },
@@ -66,8 +58,9 @@ $(function() {
                     // 1. 加载 res.data 中的数据到列表中
                     $table.bootstrapTable("load", res.data);
 
-                    // 2. `操作`权限判断, 增删改只要有一个就显示, 自已在html上定义此方法实现
+                    // 2. `操作`权限判断, 删改只要有一个就显示, 自已在html上定义此方法实现
                     showOperation();
+
 
                     // 3. 渲染为树状列表
                     $table.treegrid({
@@ -94,6 +87,8 @@ $(function() {
                 '<ul class="dropdown-menu dropdown-menu-right" role="menu">');
 
             getOperationHtml(operationHtml, row);
+            // operationHtml.push('<li><a class="dropdown-item btn btn-primary"><i class="fa fa-edit"></i>&nbsp;修改</a></li>')
+            // operationHtml.push('<li><a class="dropdown-item btn btn-primary"><i class="fa fa-trash"></i>&nbsp;删除</a></li>')
 
             operationHtml.push( '</ul></div>');
             // 数组元素以空字符拼接成字符串返回
