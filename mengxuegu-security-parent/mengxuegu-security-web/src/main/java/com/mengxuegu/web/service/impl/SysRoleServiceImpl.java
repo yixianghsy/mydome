@@ -26,12 +26,18 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return baseMapper.selectPage(page, sysRole);
     }
 
-
+    /**
+     * 忽略红线 报错正常， idea原因不识别
+     */
     @Autowired
-    private SysPermissionMapper sysPermissionMapper; // 报错正常， idea原因不识别
+    private SysPermissionMapper sysPermissionMapper;
 
     @Override
     public SysRole findById(Long id) {
+        if (id ==null){
+            return  new SysRole();
+        }
+
         // 1. 通过角色id查询对应的角色信息
         SysRole sysRole = baseMapper.selectById(id);
         // 2. 通过角色id查询所拥有的权限
@@ -40,19 +46,19 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         sysRole.setPerList(permissions);
         return sysRole;
     }
-
+    // 进行事务管理
     @Transactional
     @Override
     public boolean saveOrUpdate(SysRole entity) {
+        // 更新时间
         entity.setUpdateDate(new Date());
         // 1. 更新角色表中的数据
         boolean flag = super.saveOrUpdate(entity);
-
+        // 有数据操作,更新角色资源权限关系
         if(flag) {
             // 2. 更新角色权限关系表中的数据(删除)
             baseMapper.deleteRolePermissionByRoleId(entity.getId());
-
-            // 2. 新增角色权限关系表中的数据
+            // 2. 新增角色权限关系表中的数据, 不为空,则将新选择的权限资源保存到角色权限资源关系表中
             if(CollectionUtils.isNotEmpty(entity.getPerIds())) {
                 baseMapper.saveRolePermission(entity.getId(), entity.getPerIds());
             }

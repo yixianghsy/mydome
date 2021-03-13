@@ -29,6 +29,12 @@ public class SysRoleController {
     @Autowired
     private SysRoleService sysRoleService;
 
+    /**
+     * 分页:角色列表数据
+     * @param page 分页
+     * @param sysRole
+     * @return
+     */
     @PreAuthorize("hasAuthority('sys:role:list')")
     @PostMapping("/page") // /role/page
     @ResponseBody

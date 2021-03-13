@@ -27,7 +27,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
 
     /**
      * 通过角色id删除角色权限表中的所有记录
-     * @param roleId
+     * @param roleId 角色id
      * @return
      */
     boolean deleteRolePermissionByRoleId(@Param("roleId") Long roleId);
