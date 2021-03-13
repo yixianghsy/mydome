@@ -1,16 +1,26 @@
 package com.mengxuegu.web.controller;
 
+import com.mengxuegu.base.result.MengxueguResult;
+import com.mengxuegu.web.entities.SysPermission;
+import com.mengxuegu.web.service.SysPermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 角色管理
- * @Auther: 梦学谷 www.mengxuegu.com
+ *
  */
 @Controller
 @RequestMapping("/permission")
 public class SysPermissionController {
+
+    @Autowired
+    private SysPermissionService sysPermissionService;
+
 	/*HTML页面路径前缀*/
     private static final String HTML_PREFIX = "system/permission/";
     /**
@@ -21,4 +31,55 @@ public class SysPermissionController {
         return HTML_PREFIX + "permission-list";
     }
 
+    /**
+     * 权限资源列表
+     * @return
+     */
+    @PostAuthorize("hasAuthority('sys:permission:list')")
+    @PostMapping("/list")
+    @ResponseBody
+    public MengxueguResult list() {
+        //查询所有权限资源
+        return MengxueguResult.ok(sysPermissionService.list());
+    }
+
+    /**
+     * 跳转到新增页面或修改页面
+     * form  新增
+     * /form/{id} 修改
+     * @param id
+     * @param model
+     * @return
+     */
+    @PreAuthorize("hasAnyAuthority('sys:permission:edit', 'sys:permission:add')")
+    @GetMapping(value = {"/form", "/form/{id}"})
+    public String form(@PathVariable(required = false) Long id, Model model){
+        //        System.out.println("id:" + id);
+        // 1. 通过权限id查询对应权限信息
+        SysPermission permission = sysPermissionService.getById(id);
+        //        SysPermission permission2 = sysPermissionService.getById(permission.getParentId());
+//        permission.setParentName(permission2.getName());
+        // 绑定后页面可获取
+        model.addAttribute("permission", permission == null ? new SysPermission() : permission);
+        return  HTML_PREFIX + "permission-form";
+    }
+
+    /**
+     *  这个是提交新增或修改的数据,
+     * @param permission
+     * @return
+     */
+    @PreAuthorize("hasAnyAuthority('sys:permission:edit', 'sys:permission:add')")
+    @RequestMapping(value="", method = {RequestMethod.PUT, RequestMethod.POST}) // /permission
+    public String saveOrUpdate(SysPermission permission) {
+        sysPermissionService.saveOrUpdate(permission);
+        return "redirect:/permission";
+    }
+    @PreAuthorize("hasAuthority('sys:permission:delete')")
+    @DeleteMapping("/{id}") // /permission/{id}
+    @ResponseBody
+    public MengxueguResult deleteById(@PathVariable("id") Long id){
+        sysPermissionService.deleteById(id);
+        return MengxueguResult.ok();
+    }
 }

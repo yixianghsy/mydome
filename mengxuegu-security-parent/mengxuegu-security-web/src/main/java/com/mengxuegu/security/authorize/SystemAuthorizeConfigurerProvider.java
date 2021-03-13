@@ -20,6 +20,6 @@ public class SystemAuthorizeConfigurerProvider implements AuthorizeConfigurerPro
         .antMatchers(HttpMethod.GET,"/role").hasAuthority("sys:role")
         .antMatchers(HttpMethod.GET, "/permission")
         // ADMIN 注意角色会在前面加上前缀 ROLE_ , 也就是完整的是 ROLE_ADMIN, ROLE_ROOT
-        .access("hasAuthority('sys:premission') or hasAnyRole('ADMIN', 'ROOT')");
+        .access("hasAuthority('sys:permission') or hasAnyRole('ADMIN', 'ROOT')");
     }
 }
