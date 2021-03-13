@@ -23,25 +23,24 @@
     <delete id="deleteRolePermissionByRoleId">
       DELETE FROM sys_role_permission where role_id = #{roleId}
     </delete>
-    <!--保存角色与资源权限关系数据
-    foreach 标签说明:
-    item "每个元素", index "索引", separator 标签体中整体内容以逗号分隔:(1, 1) , (1, 2)
-    -->
+
     <insert id="saveRolePermission">
-      INSERT INTO sys_role_permission(role_id, permission_id) VALUES
-      <foreach collection="perIds" item="item" index="index" separator=",">
-      (#{roleId}, #{item})
-      </foreach>
+        INSERT INTO sys_role_permission(role_id, permission_id) VALUES
+        <foreach collection="perIds" item="item" index="index" separator=",">
+            (#{roleId}, #{item})
+        </foreach>
     </insert>
-    <!--根据用户ID查询拥有角色-->
+
+
     <select id="findByUserId" resultType="SysRole">
-            SELECT
-                r.*
-            FROM
-                sys_role r
-            JOIN sys_user_role ur ON r.id = ur.role_id
-            JOIN sys_user u ON ur.user_id = u.id
-            WHERE
-                u.id = #{userId}
+        SELECT
+            r.*
+        FROM
+            sys_role r
+        JOIN sys_user_role ur ON r.id = ur.role_id
+        JOIN sys_user u ON ur.user_id = u.id
+        WHERE
+            u.id = #{userId}
     </select>
-    </mapper>
+
+</mapper>

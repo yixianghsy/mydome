@@ -20,7 +20,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      */
     IPage<SysUser> selectPage(Page<SysUser> page, @Param("u") SysUser sysUser);
 
-
     /**
      * 通过用户id删除用户角色表中的所有记录
      * @param userId
@@ -34,5 +33,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param roleIds 角色ids
      * @return
      */
-    boolean saveUserRole(@Param("userId") Long userId,@Param("roleIds") List<Long> roleIds);
+    boolean saveUserRole(@Param("userId") Long userId, @Param("roleIds") List<Long> roleIds);
+
+
 }

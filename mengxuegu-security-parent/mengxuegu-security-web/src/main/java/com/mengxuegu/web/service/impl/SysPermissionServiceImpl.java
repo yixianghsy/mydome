@@ -20,7 +20,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         }
         List<SysPermission> permissionList = baseMapper.selectPermissionByUserId(userId);
         //用户无任何权限时,list会有一个 `null` 空的SysPermission 对象,把那个null移除
-        permissionList.remove(null);
+//        permissionList.remove(null);
         return permissionList;
     }
 
@@ -30,7 +30,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         // 1. 删除当前id的权限
         baseMapper.deleteById(id);
         // 2. 删除parent_id = id 的权限, 删除当前点击的子权限
-        LambdaQueryWrapper<SysPermission> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<SysPermission> queryWrapper = new LambdaQueryWrapper();
         //delete from sys_permission where parent_id = #{id};
         queryWrapper.eq(SysPermission::getParentId, id);
         baseMapper.delete(queryWrapper);

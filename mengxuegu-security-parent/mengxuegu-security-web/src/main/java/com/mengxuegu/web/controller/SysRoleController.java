@@ -12,22 +12,22 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 角色管理
- * @Auther: 梦学谷 www.mengxuegu.com
  */
 @Controller
 @RequestMapping("/role")
 public class SysRoleController {
 
-    private static final String HTML_PREFIX = "system/role/";
+    @Autowired
+    private SysRoleService sysRoleService;
 
+    private static final String HTML_PREFIX = "system/role/";
+    @PreAuthorize("hasAuthority('sys:role')")
     @GetMapping(value = {"/", ""}) // /role/  /role
     public String role() {
         return HTML_PREFIX + "role-list";
     }
 
 
-    @Autowired
-    private SysRoleService sysRoleService;
 
     /**
      * 分页:角色列表数据
@@ -68,6 +68,19 @@ public class SysRoleController {
 //        System.out.println("sysRole: " + sysRole);
         sysRoleService.saveOrUpdate(sysRole);
         return "redirect:/role";
+    }
+
+    /**
+     * 删除角色
+     * @param id
+     * @return
+     */
+    @PreAuthorize("hasAuthority('sys:role:delete')")
+    @DeleteMapping("/{id}") // /role/{id}
+    @ResponseBody
+    public MengxueguResult deleteById(@PathVariable("id") Long id) {
+        sysRoleService.deleteById(id);
+        return MengxueguResult.ok();
     }
 
 

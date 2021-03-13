@@ -46,5 +46,4 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     boolean deleteById(Long id);
-
 }

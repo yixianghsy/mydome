@@ -34,8 +34,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public SysRole findById(Long id) {
-        if (id ==null){
-            return  new SysRole();
+        if(id == null) {
+            return new SysRole();
         }
 
         // 1. 通过角色id查询对应的角色信息
@@ -64,5 +64,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             }
         }
         return flag;
+    }
+
+
+    @Transactional //事务管理
+    @Override
+    public boolean deleteById(Long id) {
+        // 1. 通过id删除角色信息表数据
+        baseMapper.deleteById(id);
+        // 2. 通过id删除角色权限关系表数据
+        baseMapper.deleteRolePermissionByRoleId(id);
+        return true;
     }
 }

@@ -12,7 +12,7 @@ $(function () {
             {field: 'id', visible: false},
             {field: 'name', title: '角色名称'},
             {field: 'remark', title: '角色描述'},
-            {field: 'action', title: '操作', visible: true, width: 50, align: 'center', formatter: $.operationFormatter},
+            {field: 'action', title: '操作', visible: false, width: 50, align: 'center', formatter: $.operationFormatter},
         ]
     };
 

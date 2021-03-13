@@ -1,25 +1,25 @@
-
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mengxuegu.web.mapper.SysUserMapper">
+
     <select id="selectPage" resultType="SysUser">
         SELECT
-        `id`,
-        `username`,
-        `password`,
-        `is_account_non_expired`,
-        `is_account_non_locked`,
-        `is_credentials_non_expired`,
-        `is_enabled`,
-        `nick_name`,
-        `mobile`,
-        `email`,
-        `create_date`,
-        `update_date`
+            `id`,
+            `username`,
+            `password`,
+            `is_account_non_expired`,
+            `is_account_non_locked`,
+            `is_credentials_non_expired`,
+            `is_enabled`,
+            `nick_name`,
+            `mobile`,
+            `email`,
+            `create_date`,
+            `update_date`
         FROM
-        sys_user
+            sys_user
         WHERE `is_enabled` = 1
         <if test="u.username != null and u.username !=''">
             AND username LIKE CONCAT('%', #{u.username}, '%')
@@ -29,9 +29,11 @@
             AND mobile = ${u.mobile}
         </if>
     </select>
+
+
     <!--通过用户id删除用户角色关系表数据-->
     <delete id="deleteUserRoleByUserId">
-        DELETE FROM sys_user_role where user_id = #{userId}
+      DELETE FROM sys_user_role where user_id = #{userId}
     </delete>
 
     <insert id="saveUserRole">
@@ -40,4 +42,5 @@
             (#{userId}, #{item})
         </foreach>
     </insert>
+
 </mapper>

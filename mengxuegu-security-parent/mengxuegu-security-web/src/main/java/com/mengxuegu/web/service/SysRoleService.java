@@ -5,9 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mengxuegu.web.entities.SysRole;
 
-/**
- * @Auther: 梦学谷 www.mengxuegu.com
- */
 public interface SysRoleService extends IService<SysRole> {
 
     /**
@@ -24,5 +21,13 @@ public interface SysRoleService extends IService<SysRole> {
      * @return
      */
     SysRole findById(Long id);
+
+    /**
+     * 1. 通过id删除角色信息表数据
+     * 2. 通过id删除角色权限关系表数据
+     * @param id 角色id
+     * @return
+     */
+    boolean deleteById(Long id);
 
 }

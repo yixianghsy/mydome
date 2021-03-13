@@ -21,6 +21,7 @@
             <a sec:authentication="principal.username" href="#" class="d-block">梦老师</a>
         </div>
         </div>
+
         <!-- 菜单列表 Sidebar Menu -->
         <nav class="mt-2">
             <ul th:include="this::row(${#authentication.principal.permissions})" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -29,7 +30,7 @@
                 <!--声明一个代码片段, 后面需要使用递归-->
                 <th:block th:fragment="row(permissions)">
                     <!--将当前菜单集合进行循环-->
-                    <th:block th:each="p: ${permissions}">
+                     <th:block th:each="p: ${permissions}">
 
                         <!--没有子菜单-->
                         <li th:if="${#lists.size(p.children)==0}" class="nav-item">
@@ -42,28 +43,28 @@
                         </li>
                         <!--有子菜单-->
                         <li th:unless="${#lists.size(p.children)==0}" class="nav-item has-treeview menu-open"
-                            th:class="${#lists.contains(p.childrenUrl, activeUrl)}
+                        th:class="${#lists.contains(p.childrenUrl, activeUrl)}
                         ? 'nav-item has-treeview menu-open' : 'nav-item has-treeview'"
-                        >
-                            <a href="#" class="nav-link active"
-                               th:class="${#lists.contains(p.childrenUrl, activeUrl)}
+                    >
+                        <a href="#" class="nav-link active"
+                           th:class="${#lists.contains(p.childrenUrl, activeUrl)}
                            ? 'nav-link active': 'nav-link' "
-                            >
-                                <i th:class="${p.icon}" class="nav-icon fa fa-cogs"></i>
-                                <p>
-                                    [[${p.name}]]
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
+                        >
+                            <i th:class="${p.icon}" class="nav-icon fa fa-cogs"></i>
+                            <p>
+                                [[${p.name}]]
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
 
                             <!--子菜单 -->
-                            <ul class="nav nav-treeview">
-                                <!--递归获取子菜单-->
-                                <li th:include="this::row(${p.children})"></li>
-                            </ul>
-                        </li>
+                        <ul class="nav nav-treeview">
+                            <!--递归获取子菜单-->
+                            <li th:include="this::row(${p.children})"></li>
+                        </ul>
+                    </li>
 
-                    </th:block>
+                     </th:block>
 
                 </th:block>
             </ul>
