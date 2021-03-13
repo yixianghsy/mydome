@@ -40,4 +40,11 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
      */
     boolean saveRolePermission(@Param("roleId") Long roleId,@Param("perIds")  List<Long> perIds);
 
+    /**
+     * 根据用户ID获取拥有角色
+     * @param userId 用户ID
+     * @return 角色集合
+     */
+    List<SysRole> findByUserId(@Param("userId") Long userId);
+
 }

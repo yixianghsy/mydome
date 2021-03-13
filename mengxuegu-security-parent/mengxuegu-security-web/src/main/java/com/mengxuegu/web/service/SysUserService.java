@@ -1,5 +1,7 @@
 package com.mengxuegu.web.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mengxuegu.web.entities.SysUser;
 
@@ -21,4 +23,28 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     SysUser findByMobile(String mobile);
+
+    /**
+     * 分页查询用户信息
+     * @param page 分页对象
+     * @param sysUser 查询条件
+     * @return
+     */
+    IPage<SysUser> selectPage(Page<SysUser> page, SysUser sysUser);
+
+    /**
+     * 1. 用户id查询用户信息 sys_user
+     * 2. 用户id查询所拥有的角色
+     * @param id
+     * @return
+     */
+    SysUser findById(Long id);
+
+    /**
+     * 通过用户id来假删除， 将is_enabled = 0
+     * @param id
+     * @return
+     */
+    boolean deleteById(Long id);
+
 }

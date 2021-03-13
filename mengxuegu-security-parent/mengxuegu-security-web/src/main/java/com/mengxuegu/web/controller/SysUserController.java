@@ -1,22 +1,21 @@
 package com.mengxuegu.web.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mengxuegu.base.result.MengxueguResult;
-import org.assertj.core.util.Lists;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PostFilter;
+import com.mengxuegu.web.entities.SysRole;
+import com.mengxuegu.web.entities.SysUser;
+import com.mengxuegu.web.service.SysRoleService;
+import com.mengxuegu.web.service.SysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
  * 用户管理
- * @Auther: 梦学谷 www.mengxuegu.com
  */
 @Controller
 @RequestMapping("/user")
@@ -31,46 +30,54 @@ public class SysUserController {
         return HTML_PREFIX + "user-list";
     }
 
+    @Autowired
+    private SysUserService sysUserService;
     /**
-     * 跳转到新增或者修改页面
+     * 分页查询用户列表
+     * @param page 分页对象: size, current
+     * @param sysUser 查询条件 : username, mobile
      * @return
      */
-    // 有 'sys:user:add' 或 'sys:user:edit'权限 的用户可以访问
+    @PreAuthorize("hasAuthority('sys:user:list')")
+    @PostMapping("/page") // /user/page
+    @ResponseBody
+    public MengxueguResult page(Page<SysUser> page, SysUser sysUser) {
+        return MengxueguResult.ok(sysUserService.selectPage(page, sysUser));
+    }
+
+    @Autowired
+    private SysRoleService sysRoleService;
+
     @PreAuthorize("hasAnyAuthority('sys:user:add', 'sys:user:edit')")
-    @GetMapping(value={"/form"}) // /user/form
-    public String form() {
+    @GetMapping(value={"/form", "/form/{id}"})
+    public String form(@PathVariable(required = false) Long id, Model model) {
+        // 1, 查询用户信息，包含了用户所拥有的角色
+        SysUser user = sysUserService.findById(id);
+        model.addAttribute("user", user);
+
+        // 2, 查询出所有角色信息 sys_role
+        List<SysRole> roleList = sysRoleService.list();
+        model.addAttribute("roleList", roleList);
+
         return HTML_PREFIX + "user-form";
     }
 
-    // 返回值的code等于200，则调用成功有权限 ，否则把403
-    @PostAuthorize("returnObject.code == 200")
-    @RequestMapping("/{id}")  // /user/{id}
-    @ResponseBody
+    @PreAuthorize("hasAnyAuthority('sys:user:add', 'sys:user:edit')")
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT}, value = "")
+    public String saveOrUpdate(SysUser sysUser) {
+        // 1. 保存到用户表, 要将选择的角色保存到用户角色中间表
+        sysUserService.saveOrUpdate(sysUser);
+        return "redirect:/user";
+    }
+
+    @PreAuthorize("hasAuthority('sys:user:delete')")
+    @DeleteMapping("/{id}") // /user/{id}
     public MengxueguResult deleteById(@PathVariable Long id) {
-
-        if(id < 0) {
-            return MengxueguResult.build(500, "id不能小于0", id);
-        }
-
+        // 假删除，只做更新
+        sysUserService.deleteById(id);
         return MengxueguResult.ok();
     }
 
-    // 过滤请求参数：filterTarget 指定哪个参数，filterObject是集合中的每个元素，
-    // 如果value表达式为true的数据则不会被过滤，否则 就过滤掉
-    @PreFilter(filterTarget = "ids", value = "filterObject > 0")
-    @RequestMapping("/batch/{ids}") // /user/batch/-1,0,1,2
-    @ResponseBody
-    public MengxueguResult deleteByIds(@PathVariable List<Long> ids) {
-        return MengxueguResult.ok(ids);
-    }
 
-    // 过滤返回值：filterObject是返回值集合中的每一个元素，当表达式为true则对应元素会返回
-    @PostFilter("filterObject != authentication.principal.username")
-    @RequestMapping("/list")
-    @ResponseBody
-    public List<String> page() {
-        List<String> userList = Lists.newArrayList("meng", "xue", "gu");
-        return userList;
-    }
 
 }
