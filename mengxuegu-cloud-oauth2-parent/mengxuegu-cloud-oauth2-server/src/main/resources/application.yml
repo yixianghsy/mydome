@@ -19,7 +19,7 @@ spring:
     maxWait: 60000
     timeBetweenEvictionRunsMillis: 60000
     minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL=
+    validationQuery: SELECT 1 FROM DUAL
 #  Spring Security 对 OAuth2 默认提供了可直接访问端点，即URL：
 #  /oauth/authorize ：申请授权码 code,  涉及的类 AuthorizationEndpoint
 #  /oauth/token ：获取令牌 token,  涉及的类 TokenEndpoint
