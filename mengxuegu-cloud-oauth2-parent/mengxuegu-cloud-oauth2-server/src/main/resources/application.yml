@@ -2,25 +2,14 @@ server:
   port: 8090
   servlet:
     context-path: /auth # 应用名 localhost:8090/auth
-#这里以后用DUBBO和ZK
-eureka:
-  client:
-    registerWithEureka: true # 服务注册开关
-    fetchRegistry: true # 服务发现开关
-    serviceUrl: # 注册到哪一个Eureka Server服务注册中心，多个中间用逗号分隔
-      defaultZone: http://localhost:6001/eureka
-  instance:
-    instanceId: ${spring.application.name}:${server.port} # 指定实例ID,页面会显示主机名
-    preferIpAddress: true     #访问路径可以显示IP地址
+
 
 spring:
-  application:
-    name: auth-server # Eureka页面显示/以后就是DUBBO页面显示
   # 数据源配置
   datasource:
     username: root
     password: root
-    url: jdbc:mysql://127.0.0.1:3306/study-security?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://192.168.10.101:3306/study-security?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8
     #mysql8版本以上驱动包指定新的驱动类
     driver-class-name: com.mysql.cj.jdbc.Driver
     #   数据源其他配置, 在 DruidConfig配置类中手动绑定
@@ -30,17 +19,11 @@ spring:
     maxWait: 60000
     timeBetweenEvictionRunsMillis: 60000
     minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-
-
-mybatis-plus:
-  # 指定实体类所有包
-  type-aliases-package: com.mengxuegu.oauth2.web.entities
-
-# 日志级别，会打印sql语句
-logging:
-  level:
-    com.mengxuegu.oauth2.web.mapper: debug
-
-
-
+    validationQuery: SELECT 1 FROM DUAL=
+#  Spring Security 对 OAuth2 默认提供了可直接访问端点，即URL：
+#  /oauth/authorize ：申请授权码 code,  涉及的类 AuthorizationEndpoint
+#  /oauth/token ：获取令牌 token,  涉及的类 TokenEndpoint
+#  /oauth/check_token ：用于资源服务器请求端点来检查令牌是否有效,  涉及的类 CheckTokenEndpoint
+#  /oauth/confirm_access ：用户确认授权提交,  涉及的类 WhitelabelApprovalEndpoint
+#  /oauth/error ：授权服务错误信息,  涉及的类   WhitelabelErrorEndpoint
+#  /oauth/token_key ：提供公有密匙的端点，使用 JWT 令牌时会使用 , 涉及的类 TokenKeyEndpoint
