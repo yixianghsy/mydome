@@ -1,4 +1,4 @@
-package com.mengxuegu.oauth2.resource.config;
+package com.mengxuegu.oauth2.resource;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Bean;
