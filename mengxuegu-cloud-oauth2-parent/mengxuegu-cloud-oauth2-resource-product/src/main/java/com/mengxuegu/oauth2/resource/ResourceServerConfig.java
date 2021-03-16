@@ -8,8 +8,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 /**
@@ -17,11 +15,12 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
  * @EnableResourceServer // 标识为资源服务器，请求服务中的资源，就要带着token过来，找不到token或token是无效访问不了资源
  */
 @Configuration
-@EnableResourceServer
+@EnableResourceServer // 标识为资源服务器，请求服务中的资源，就要带着token过来，找不到token或token是无效访问不了资源
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 开启方法级别权限控制
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     //配置当前资源服务器的ID
     public static final String RESOURCE_ID = "product-server";
+
 
     @Autowired
     private TokenStore tokenStore;
@@ -34,10 +33,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         // 当前资源服务器的资源id，认证服务会认证客户端有没有访问这个资源id的权限，有则可以访问当前服务
         resources.resourceId(RESOURCE_ID)
-                //.tokenServices(tokenService())
-                .tokenStore(tokenStore)
-                ;
-
+            .tokenStore(tokenStore)
+//                .tokenServices(tokenService())
+        ;
     }
 /**
  * 配置资源服务器如何验证token有效性
@@ -55,21 +53,21 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 //        service.setClientSecret("mengxuegu-secret");
 //        return service;
 //    }
-
-
+    
+    //令牌端点的安全配置
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.sessionManagement()
                 // SpringSecurity不会使用也不会创建HttpSession实例
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+            .and()
                 .authorizeRequests()
                 // 授权规则配置
 //                .antMatchers("/product/*").hasAuthority("product")
                 // 所有请求，都需要有all范围（scope）
                 .antMatchers("/**").access("#oauth2.hasScope('all')")
-        // 等价于上面
+                // 等价于上面
 //                .anyRequest().access("#oauth2.hasScope('all')")
-                ;
+            ;
     }
 }
