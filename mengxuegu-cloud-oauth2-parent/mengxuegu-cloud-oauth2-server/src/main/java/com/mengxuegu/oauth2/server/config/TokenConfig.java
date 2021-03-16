@@ -10,8 +10,10 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import javax.sql.DataSource;
 @Configuration
 public class TokenConfig {
+
     //@Autowired 采用redis管理token
     //private RedisConnectionFactory redisConnectionFactory;
+
     // jdbc管理token
     @ConfigurationProperties(prefix = "spring.datasource")
     @Bean
@@ -26,4 +28,5 @@ public class TokenConfig {
 //        return new RedisTokenStore(redisConnectionFactory);
         return new JdbcTokenStore(dataSource());
     }
+
 }

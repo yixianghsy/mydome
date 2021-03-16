@@ -11,11 +11,15 @@ import org.springframework.stereotype.Component;
 
 @Component("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
+
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return new User("admin", passwordEncoder.encode("1234"),
-                AuthorityUtils.commaSeparatedStringToAuthorityList("product"));
+            return new User("admin", passwordEncoder.encode("1234"),
+                    AuthorityUtils.commaSeparatedStringToAuthorityList("product"));
     }
+
 }

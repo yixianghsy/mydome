@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired // 在 SpringSecurityBean 添加到容器了
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
 
@@ -29,10 +29,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // 内存方式存储用户信息
-        auth.inMemoryAuthentication().withUser("admin")
-                .password(passwordEncoder.encode("1234")).authorities("product");
-
+//        auth.inMemoryAuthentication()
+//                .withUser("admin").password(passwordEncoder.encode("1234"))
+//                .authorities("product");
         auth.userDetailsService(customUserDetailsService);
     }
 
