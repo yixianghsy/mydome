@@ -57,6 +57,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     //令牌端点的安全配置
     @Override
     public void configure(HttpSecurity http) throws Exception {
+
+
         http.sessionManagement()
                 // SpringSecurity不会使用也不会创建HttpSession实例
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>mengxuegu-cloud-oauth2-parent</artifactId>
-        <groupId>com.mengxuegu</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>mengxuegu-cloud-oauth2-parent</artifactId>
+		<groupId>com.mengxuegu</groupId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.mengxuegu</groupId>
+	<artifactId>mengxuegu-cloud-gateway</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>ZuulServer_7001</name>
+	<description>路由网关</description>
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
 
-    <artifactId>mengxuegu-cloud-gateway</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>com.mengxuegu</groupId>
+			<artifactId>mengxuegu-cloud-oauth2-base</artifactId>
+			<version>${mengxuegu-security.version}</version>
+		</dependency>
+		<!-- 一样作为资源服务器，所以要引入 -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-oauth2</artifactId>
+		</dependency>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.mengxuegu</groupId>
-            <artifactId>mengxuegu-cloud-oauth2-base</artifactId>
-            <version>${mengxuegu-security.version}</version>
-        </dependency>
-        <!-- 一样作为资源服务器，所以要引入 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <!--zuul路由网关依赖-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		<!--zuul路由网关依赖-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+		</dependency>
+	</dependencies>
 </project>

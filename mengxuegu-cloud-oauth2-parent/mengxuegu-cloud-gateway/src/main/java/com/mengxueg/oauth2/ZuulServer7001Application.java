@@ -1,15 +1,17 @@
-package com.mengxuegu.oauth2;
+package com.mengxueg.oauth2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
-@EnableEurekaClient //本服务启动后会自动注册进Eureka中心
+@EnableZuulProxy //开启zuul的功能
+@EnableEurekaClient
 @SpringBootApplication
-public class ProductResourceApplication {
+public class ZuulServer7001Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProductResourceApplication.class, args);
+		SpringApplication.run(ZuulServer7001Application.class, args);
 	}
 
 }
