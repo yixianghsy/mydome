@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * ServiceImpl<M extends BaseMapper<T>, T> 是对 IService接口中方法的实现
  *     第1个泛型 M 指定继承了 BaseMapper接口的子接口
  *     第2个泛型 T 指定实体类
- * @Auther: 梦学谷 www.mengxuegu.com 
+ * @Auther: 梦学谷 www.mengxuegu.com
  */
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {

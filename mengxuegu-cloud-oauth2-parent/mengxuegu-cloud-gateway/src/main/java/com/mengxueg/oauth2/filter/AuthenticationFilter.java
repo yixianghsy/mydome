@@ -30,11 +30,9 @@ import java.util.Set;
  * shouldFilter：返回Boolean值，判断该过滤器是否执行。返回true表示要执行此过虑器，false不执行。
  * run：过滤器的业务逻辑
  */
-@Component //不要少了
-public class AuthenticationFilter  extends ZuulFilter {
-
+@Component // 不要少了
+public class AuthenticationFilter extends ZuulFilter {
     Logger logger = LoggerFactory.getLogger(getClass());
-
     @Override
     public String filterType() {
         return "pre";
@@ -67,11 +65,10 @@ public class AuthenticationFilter  extends ZuulFilter {
         // 获取用户所拥有的权限
         Collection<? extends GrantedAuthority> authorities
                 = authentication.getAuthorities();
-
         Set<String> authoritySet = AuthorityUtils.authorityListToSet(authorities);
-
         // 请求详情
         Object details = authentication.getDetails();
+
         Map<String, Object> result =  new HashMap<>();
         result.put("principal", principal);
         result.put("authorities", authoritySet);
@@ -82,7 +79,7 @@ public class AuthenticationFilter  extends ZuulFilter {
         // 将用户信息和权限信息转成json,再通过base64进行编码
         String base64 = Base64Utils.encodeToString(JSON.toJSONString(result).getBytes());
         // 添加到请求头
-        context.addOriginResponseHeader("auth-token", base64);
+        context.addZuulRequestHeader("auth-token", base64);
         return null;
     }
 }

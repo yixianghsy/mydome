@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 权限实体类
- * @Auther: 梦学谷 www.mengxuegu.com 
+ * @Auther: 梦学谷 www.mengxuegu.com
  */
 @Data
 public class SysPermission implements Serializable {
