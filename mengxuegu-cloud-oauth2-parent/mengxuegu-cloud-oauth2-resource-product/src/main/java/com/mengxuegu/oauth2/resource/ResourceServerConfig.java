@@ -67,9 +67,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 // 授权规则配置
 //                .antMatchers("/product/*").hasAuthority("product")
                 // 所有请求，都需要有all范围（scope）
-//                .antMatchers("/**").access("#oauth2.hasScope('all')")
+                .antMatchers("/**").access("#oauth2.hasScope('all')")
                 //全部放行
-                .antMatchers("/**").permitAll()
+//                .antMatchers("/**").permitAll()
                 // 等价于上面
 //                .anyRequest().access("#oauth2.hasScope('all')")
             ;

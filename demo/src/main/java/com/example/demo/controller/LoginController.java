@@ -1,17 +1,11 @@
-package com.e3mall.sso.controller;
-
-
-
-import com.e3mall.mansger.service.LoginService;
-import com.e3mall.utils.CookieUtils;
-import com.e3mall.utils.E3Result;
-import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+package com.example.demo.controller;
+import com.example.demo.utils.CookieUtils;
+import com.example.demo.utils.E3Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,30 +21,17 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class LoginController {
 
-   @Reference
-    private LoginService loginService;
 
-    @Value("${TOKEN_KEY}")
-    private String TOKEN_KEY;
+    private String TOKEN= "hsyhgjkfdgfkhdasghasgfvas";
 
-    @RequestMapping("/page/login")
-    public String showLogin(String redirect, Model model) {
-        model.addAttribute("redirect", redirect);
-        return "login";
-    }
 
-    @RequestMapping(value="/user/login", method= RequestMethod.POST)
+    @RequestMapping(value="/api/login", method= RequestMethod.GET)
     @ResponseBody
-    public E3Result login(String username, String password,
-                          HttpServletRequest request, HttpServletResponse response) {
-        E3Result e3Result = loginService.userLogin(username, password);
-        //判断是否登录成功
-        if(e3Result.getStatus()==200){
-            String token = e3Result.getData().toString();
-            //如果登录成功需要把token写入cookie
-            CookieUtils.setCookie(request, response, TOKEN_KEY, token);
-
-        }
+    public E3Result login(@RequestParam("username") String username, @RequestParam("password") String password) {
+        E3Result e3Result = new E3Result();
+        e3Result.setMessage("登录成功");
+        e3Result.setCode(0);
+        e3Result.setToken(TOKEN);
         return e3Result;
     }
 }

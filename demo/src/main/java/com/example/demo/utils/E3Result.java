@@ -1,4 +1,4 @@
-package com.e3mall.utils;
+package com.example.demo.utils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,6 +19,37 @@ public class E3Result implements Serializable{
 
     // 响应中的数据
     private Object data;
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    private  Integer code;
+
+    private  String message;
+
+    //token
+    private String token;
 
     public static E3Result build(Integer status, String msg, Object data) {
         return new E3Result(status, msg, data);

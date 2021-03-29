@@ -1,4 +1,4 @@
-package com.e3mall.utils;
+package com.example.demo.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
